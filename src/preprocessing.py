@@ -14,8 +14,10 @@ def to_grayscale(image):
 
     Pista: cv2.cvtColor con cv2.COLOR_BGR2GRAY
     """
-    # TODO: Implementar
-    pass
+    # T0DO: Implementar
+    
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    return gray.astype(np.uint8)
 
 
 def resize_image(image, width, height):
@@ -33,8 +35,9 @@ def resize_image(image, width, height):
     Pista: cv2.resize con interpolación cv2.INTER_AREA.
            Recuerda que cv2.resize recibe (width, height) como dsize.
     """
-    # TODO: Implementar
-    pass
+    # T0DO: Implementar
+    resized = cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
+    return resized.astype(np.uint8)
 
 
 def apply_blur(image, kernel_size=5):
@@ -50,8 +53,9 @@ def apply_blur(image, kernel_size=5):
 
     Pista: cv2.GaussianBlur(image, (kernel_size, kernel_size), 0)
     """
-    # TODO: Implementar
-    pass
+    # T0DO: Implementar
+    blurred = cv2.GaussianBlur(image, (kernel_size, kernel_size), 0)
+    return blurred.astype(np.uint8)
 
 
 def adjust_brightness_contrast(image, alpha=1.0, beta=0):
@@ -68,8 +72,9 @@ def adjust_brightness_contrast(image, alpha=1.0, beta=0):
 
     Pista: cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
     """
-    # TODO: Implementar
-    pass
+    # T0DO: Implementar
+    adjusted = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+    return adjusted.astype(np.uint8)
 
 
 def apply_threshold(image, thresh_value=127):
@@ -89,8 +94,10 @@ def apply_threshold(image, thresh_value=127):
     """
     if len(image.shape) != 2:
         raise ValueError("apply_threshold requiere una imagen en escala de grises (1 canal).")
-    # TODO: Implementar
-    pass
+    
+    # T0DO: Implementar
+    _, thresholded = cv2.threshold(image, thresh_value, 255, cv2.THRESH_BINARY)
+    return thresholded.astype(np.uint8)
 
 
 def detect_edges(image, low=50, high=150):
@@ -108,8 +115,14 @@ def detect_edges(image, low=50, high=150):
     Pista: Si la imagen tiene más de un canal, conviértela primero a escala de grises.
            Luego aplica cv2.Canny(gray, low, high).
     """
-    # TODO: Implementar
-    pass
+    # T0DO: Implementar
+    if len(image.shape) == 3:
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        gray = image
+
+    edges = cv2.Canny(gray, low, high)
+    return edges.astype(np.uint8)
 
 
 def full_pipeline(image, target_width=224, target_height=224):
@@ -130,5 +143,10 @@ def full_pipeline(image, target_width=224, target_height=224):
     Retorna:
         np.ndarray: Imagen final procesada (target_height x target_width), dtype uint8.
     """
-    # TODO: Implementar usando las funciones anteriores en el orden indicado
-    pass
+    # T0DO: Implementar usando las funciones anteriores en el orden indicado
+    resized = resize_image(image, target_width, target_height)
+    gray = to_grayscale(resized)
+    blurred = apply_blur(gray, kernel_size=3)
+    edges = detect_edges(blurred, low=50, high=150)
+
+    return edges.astype(np.uint8)
